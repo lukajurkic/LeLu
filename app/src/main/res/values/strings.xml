@@ -1,0 +1,49 @@
+<resources>
+    <string name="app_name">LeLu</string>
+
+    <!--general strings-->
+    <string name="LogoTextPart1">L e L u</string>
+    <string name="LogoTextPart2">T O O L S </string>
+    <string name="WorkoutTool">Workout Tool</string>
+    <string name="FuelTool">Fuel Tool</string>
+    <string name="MatrixCalculator">Matrix\nCalculator</string>
+    <string name="Settings">Settings</string>
+    <string name="ComingSoon">&#8230;</string>
+    <string name="GoBack">GoBack</string>
+    <string name="Delete">Delete</string>
+
+    <!--Content description-->
+    <string name="RandomTool">Random tool</string>
+    <string name="Exit">Exit</string>
+
+    <!--fuel strings-->
+    <string name="btnFuel">Fuel</string>
+    <string name="txtFuelPrice">Fuel price:</string>
+    <string name="txtFuelConsumption">l/100km:</string>
+    <string name="txtDistance">Distance:</string>
+    <string name="txtPrice">Price</string>
+    <string name="txtCurrency">kn</string>
+    <string name="btnCalculate">Calculate</string>
+    <string name="hintValueDecimalZero">0.0</string>
+    <string-array name="spnFuelConsumption">
+        <item>l/100km</item>
+        <item>mpg UK</item>
+        <item>mpg USA</item>
+    </string-array>
+
+    <!--workout string-->
+    <string name="btnWorkout">Workout</string>
+    <string name="initialValue0">0</string>
+    <string name="initialValue1">1</string>
+    <string name="increase">+</string>
+    <string name="decrease">-</string>
+    <string name="PushUps">Push ups</string>
+    <string name="PullUps">Pull ups</string>
+    <string name="Dips">Dips</string>
+
+    <!--matrix string-->
+    <string name="MatrixSize">Matrix type: M x N</string>
+    <string name="M">M: </string>
+    <string name="N">N: </string>
+    <string name="Hint3">3</string>
+</resources>
