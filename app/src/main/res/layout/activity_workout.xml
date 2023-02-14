@@ -81,7 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/dimDimGray"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:visibility="visible">
 
                 <ImageView
                     android:id="@+id/imageViewPushUps"
@@ -98,56 +99,65 @@
                     android:contentDescription="@string/PushUps"
                     android:onClick="onClickClear"
                     android:tag="@string/PushUps"/>
+
                 <Button
                     android:id="@+id/btnIncPushUps"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/workout_round_button"
-                    app:backgroundTint="@null"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
                     android:text="@string/increase"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
                     android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    android:onClick="onClickAdd"
+                    android:tag="@string/PushUps"/>
+
                 <EditText
                     android:id="@+id/editTextIncDecPushUps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autofillHints="1"
+                    android:backgroundTint="@color/blue"
+                    android:hint="@string/initialValue1"
                     android:inputType="number"
                     android:textColor="@color/white"
+                    android:textColorHint="@color/dimGray"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPushUps"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00"
-                    android:autofillHints="1"
-                    android:hint="@string/initialValue1"
-                    android:textColorHint="@color/dimGray"
-                    android:backgroundTint="@color/blue"/>
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
                 <Button
                     android:id="@+id/btnDecPushUps"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/workout_round_button"
-                    app:backgroundTint="@null"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
                     android:text="@string/decrease"
-                    android:textColor="@color/white"
-                    android:textSize="20sp"
                     android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="25sp"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecPushUps"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00" />
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    android:onClick="onClickSubtract"
+                    android:tag="@string/PushUps"/>
                 <TextView
                     android:id="@+id/textPushUps"
                     android:layout_width="wrap_content"
@@ -208,28 +218,32 @@
                     app:backgroundTint="@null"
                     android:text="@string/increase"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="onClickAdd"
+                    android:tag="@string/PullUps"/>
+
                 <EditText
                     android:id="@+id/editTextIncDecPullUps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autofillHints="1"
+                    android:backgroundTint="@color/blue"
+                    android:hint="@string/initialValue1"
                     android:inputType="number"
                     android:textColor="@color/white"
+                    android:textColorHint="@color/dimGray"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPullUps"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00"
-                    android:autofillHints="1"
-                    android:hint="@string/initialValue1"
-                    android:textColorHint="@color/dimGray"
-                    android:backgroundTint="@color/blue"/>
+                    tools:ignore="TextContrastCheck" />
                 <Button
                     android:id="@+id/btnDecPullUps"
                     android:minHeight="0dp"
@@ -240,13 +254,15 @@
                     app:backgroundTint="@null"
                     android:text="@string/decrease"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecPullUps"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00"/>
+                    app:layout_constraintHorizontal_bias="1.00"
+                    android:onClick="onClickSubtract"
+                    android:tag="@string/PullUps"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutDips"
@@ -294,28 +310,32 @@
                     app:backgroundTint="@null"
                     android:text="@string/increase"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"/>
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:onClick="onClickAdd"
+                    android:tag="@string/Dips"/>
+
                 <EditText
                     android:id="@+id/editTextIncDecDips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:autofillHints="1"
+                    android:backgroundTint="@color/blue"
+                    android:hint="@string/initialValue1"
                     android:inputType="number"
                     android:textColor="@color/white"
+                    android:textColorHint="@color/dimGray"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncDips"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00"
-                    android:autofillHints="1"
-                    android:hint="@string/initialValue1"
-                    android:textColorHint="@color/dimGray"
-                    android:backgroundTint="@color/blue"/>
+                    tools:ignore="TextContrastCheck" />
                 <Button
                     android:id="@+id/btnDecDips"
                     android:minHeight="0dp"
@@ -326,13 +346,15 @@
                     app:backgroundTint="@null"
                     android:text="@string/decrease"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="25sp"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecDips"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00"/>
+                    app:layout_constraintHorizontal_bias="1.00"
+                    android:onClick="onClickSubtract"
+                    android:tag="@string/Dips"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>

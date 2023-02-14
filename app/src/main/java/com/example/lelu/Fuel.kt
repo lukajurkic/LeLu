@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
 import android.widget.AdapterView
@@ -42,7 +43,7 @@ class Fuel : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        // binding = ActivityFuelBinding.inflate(LayoutInflater.from(this)) //same as next line
         binding = ActivityFuelBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)

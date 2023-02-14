@@ -65,7 +65,7 @@ class MainMenu : AppCompatActivity() {
 
     fun onClickMatrix(view: View){
         val animationBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
-        binding.btnWorkout.startAnimation(animationBounce)
+        binding.btnMatrix.startAnimation(animationBounce)
         animationBounce.setAnimationListener(object: Animation.AnimationListener{
             override fun onAnimationStart(p0: Animation?) { }
             override fun onAnimationRepeat(p0:Animation?) { }

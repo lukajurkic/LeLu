@@ -10,7 +10,13 @@ import com.example.lelu.databinding.ActivityWorkoutBinding
 //toast: Toast.makeText(applicationContext,"message", Toast.LENGTH_LONG).show()
 
 class Workout : AppCompatActivity() {
+
     private lateinit var binding: ActivityWorkoutBinding
+
+    private var pushUpsCounter = 0
+    private var pullUpsCounter = 0
+    private var dipsCounter = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWorkoutBinding.inflate(layoutInflater)
@@ -26,28 +32,109 @@ class Workout : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
     }
+
+    //reset's individual workout layout
     fun onClickClear(view: View){
-        val something:String = view.tag.toString()
-        onClickClear(something)
+        val tag:String = view.tag.toString()
+        onClickClear(tag)
     }
-    private fun onClickClear(something : String){
-        if (something == resources.getString(R.string.PushUps)){
-            binding.textPushUps.text = "0"
-            binding.textPushUps.clearFocus()
-            binding.editTextIncDecPushUps.text.clear()
-            binding.editTextIncDecPushUps.clearFocus()
+    private fun onClickClear(tag : String){
+        when(tag){
+            resources.getString(R.string.PushUps) -> {
+                if (binding.editTextIncDecPushUps.text.toString() == ""){
+                    binding.textPushUps.text = "0"
+                    binding.textPushUps.clearFocus()
+                }
+                binding.editTextIncDecPushUps.text.clear()
+                binding.editTextIncDecPushUps.clearFocus()
+            }
+            resources.getString(R.string.PullUps) -> {
+                if(binding.editTextIncDecPullUps.text.toString() == ""){
+                    binding.textPullUps.text = "0"
+                    binding.textPullUps.clearFocus()
+                }
+                binding.editTextIncDecPullUps.text.clear()
+                binding.editTextIncDecPullUps.clearFocus()
+            }
+            resources.getString(R.string.Dips) -> {
+                if(binding.editTextIncDecDips.text.toString() == ""){
+                    binding.textDips.text = "0"
+                    binding.textDips.clearFocus()
+                }
+                binding.editTextIncDecDips.text.clear()
+                binding.editTextIncDecDips.clearFocus()
+            }
+            else -> { }
         }
-        else if(something == resources.getString(R.string.PullUps)){
-            binding.textPullUps.text = "0"
-            binding.textPullUps.clearFocus()
-            binding.editTextIncDecPullUps.text.clear()
-            binding.editTextIncDecPullUps.clearFocus()
+    }
+
+    //adds repetitions
+    fun onClickAdd(view: View){
+        val tag:String = view.tag.toString()
+        onClickAdd(tag)
+    }
+    private fun onClickAdd(tag: String){
+        //when == switch case
+        when(tag){
+            resources.getString(R.string.PushUps) -> {
+                if(binding.editTextIncDecPushUps.text.toString() != ""){
+                    pushUpsCounter += Integer.parseInt(binding.editTextIncDecPushUps.text.toString())
+                }else{
+                    pushUpsCounter++
+                }
+                binding.textPushUps.text = pushUpsCounter.toString()
+            }
+            resources.getString(R.string.PullUps) -> {
+                if(binding.editTextIncDecPullUps.text.toString() != ""){
+                    pullUpsCounter += Integer.parseInt(binding.editTextIncDecPullUps.text.toString())
+                }else{
+                    pullUpsCounter++
+                }
+                binding.textPullUps.text = pullUpsCounter.toString()
+            }
+            resources.getString(R.string.Dips) -> {
+                if(binding.editTextIncDecDips.text.toString() != ""){
+                    dipsCounter += Integer.parseInt(binding.editTextIncDecDips.text.toString())
+                }else{
+                    dipsCounter++
+                }
+                binding.textDips.text = dipsCounter.toString()
+            }
+            else -> { }
         }
-        else if(something == resources.getString(R.string.Dips)){
-            binding.textDips.text = "0"
-            binding.textDips.clearFocus()
-            binding.editTextIncDecDips.text.clear()
-            binding.editTextIncDecDips.clearFocus()
+    }
+
+    fun onClickSubtract(view: View){
+        val tag:String = view.tag.toString()
+        onClickSubtract(tag)
+    }
+    private fun onClickSubtract(tag: String){
+        when(tag){
+            resources.getString(R.string.PushUps) -> {
+                if(binding.editTextIncDecPushUps.text.toString() != ""){
+                    pushUpsCounter -= Integer.parseInt(binding.editTextIncDecPushUps.text.toString())
+                }else{
+                    pushUpsCounter--
+                }
+                binding.textPushUps.text = pushUpsCounter.toString()
+            }
+            resources.getString(R.string.PullUps) -> {
+                if(binding.editTextIncDecPullUps.text.toString() != ""){
+                    pullUpsCounter -= Integer.parseInt(binding.editTextIncDecPullUps.text.toString())
+                }else{
+                    pullUpsCounter--
+                }
+                binding.textPullUps.text = pullUpsCounter.toString()
+            }
+            resources.getString(R.string.Dips) -> {
+                if(binding.editTextIncDecDips.text.toString() != ""){
+                    dipsCounter -= Integer.parseInt(binding.editTextIncDecDips.text.toString())
+                }else{
+                    dipsCounter--
+                }
+                binding.textDips.text = dipsCounter.toString()
+            }
+            else -> { }
         }
     }
 
