@@ -20,8 +20,6 @@ class MainMenu : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        //TextViewCompat.setAutoSizeTextTypeWithDefaults(binding.textViewLeLu,TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
-        //TextViewCompat.setAutoSizeTextTypeWithDefaults(binding.textViewTools,TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
         TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(binding.textViewLeLu,70,100,5,
             TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
         TextViewCompat.setAutoSizeTextTypeUniformWithConfiguration(binding.textViewTools,70,100,5,
@@ -36,48 +34,41 @@ class MainMenu : AppCompatActivity() {
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
     }
     //disables going back to activityMain
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() { }
 
-    fun onClickFuel(view: View) {
+    fun onClickChangeActivity(view: View){
+        val tag: String = view.tag.toString()
+        onClickChangeActivity(tag)
+    }
+    private fun onClickChangeActivity(tag: String){
         val animationBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
-        binding.btnFuel.startAnimation(animationBounce)
+        var intent = Intent(this@MainMenu, MainMenu::class.java)
+        when(tag){
+            resources.getString(R.string.FuelTool) -> {
+                binding.btnFuel.startAnimation(animationBounce)
+                intent = Intent(this@MainMenu, Fuel::class.java)
+            }
+            resources.getString(R.string.WorkoutTool) -> {
+                binding.btnWorkout.startAnimation(animationBounce)
+                intent = Intent(this@MainMenu, Workout::class.java)
+            }
+            resources.getString(R.string.MatrixCalculator) -> {
+                binding.btnMatrix.startAnimation(animationBounce)
+                intent = Intent(this@MainMenu, Matrix::class.java)
+            }
+            resources.getString(R.string.Exit) -> {
+                finishAffinity()
+                exitProcess(0)
+            }
+            else -> { }
+        }
         animationBounce.setAnimationListener(object: Animation.AnimationListener{
             override fun onAnimationStart(p0: Animation?) { }
             override fun onAnimationRepeat(p0: Animation?) { }
             override fun onAnimationEnd(animation: Animation?) {
-                val intent = Intent(this@MainMenu, Fuel::class.java)
                 startActivity(intent)
             }
         })
-    }
-    fun onClickWorkout(view: View){
-        val animationBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
-        binding.btnWorkout.startAnimation(animationBounce)
-        animationBounce.setAnimationListener(object: Animation.AnimationListener{
-            override fun onAnimationStart(p0: Animation?) { }
-            override fun onAnimationRepeat(p0:Animation?) { }
-            override fun onAnimationEnd(animation: Animation?) {
-                val intent = Intent(this@MainMenu, Workout::class.java)
-                startActivity(intent)
-            }
-        })
-    }
-
-    fun onClickMatrix(view: View){
-        val animationBounce = AnimationUtils.loadAnimation(this, R.anim.bounce)
-        binding.btnMatrix.startAnimation(animationBounce)
-        animationBounce.setAnimationListener(object: Animation.AnimationListener{
-            override fun onAnimationStart(p0: Animation?) { }
-            override fun onAnimationRepeat(p0:Animation?) { }
-            override fun onAnimationEnd(animation: Animation?) {
-                val intent = Intent(this@MainMenu, Matrix::class.java)
-                startActivity(intent)
-            }
-        })
-    }
-
-    fun onClickLogout(view: View){
-        finishAffinity()
-        exitProcess(0)
     }
 }

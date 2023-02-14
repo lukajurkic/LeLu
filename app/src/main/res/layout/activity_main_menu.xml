@@ -65,7 +65,8 @@
         android:background="@color/Transparent"
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
-        android:onClick="onClickLogout"
+        android:onClick="onClickChangeActivity"
+        android:tag="@string/Exit"
         tools:ignore="SpeakableTextPresentCheck"
         android:contentDescription="@string/Exit"
         />
@@ -122,7 +123,8 @@
                     android:scaleX="0.7"
                     android:scaleY="0.7"
                     android:src="@drawable/fuelicon"
-                    android:onClick="onClickFuel"
+                    android:onClick="onClickChangeActivity"
+                    android:tag="@string/FuelTool"
                     tools:ignore="SpeakableTextPresentCheck"
                     android:contentDescription="@string/FuelTool"
                     />
@@ -137,7 +139,8 @@
                     android:scaleType="fitCenter"
                     android:scaleX="0.7"
                     android:scaleY="0.7"
-                    android:onClick="onClickWorkout"
+                    android:onClick="onClickChangeActivity"
+                    android:tag="@string/WorkoutTool"
                     tools:ignore="SpeakableTextPresentCheck"
                     android:contentDescription="@string/WorkoutTool" />
                 <ImageButton
@@ -151,7 +154,8 @@
                     android:scaleType="fitCenter"
                     android:scaleX="0.7"
                     android:scaleY="0.7"
-                    android:onClick="onClickMatrix"
+                    android:onClick="onClickChangeActivity"
+                    android:tag="@string/MatrixCalculator"
                     tools:ignore="SpeakableTextPresentCheck"
                     android:contentDescription="@string/MatrixCalculator"
                     />
