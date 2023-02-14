@@ -46,4 +46,8 @@
     <string name="M">M: </string>
     <string name="N">N: </string>
     <string name="Hint3">3</string>
+    <string name="initialValueTime">00:00:00</string>
+    <string name="Play">Play</string>
+    <string name="Pause">Pause</string>
+    <string name="Reset">Reset</string>
 </resources>

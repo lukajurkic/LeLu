@@ -45,6 +45,8 @@
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/Delete"
+        android:onClick="onClickClear"
+        android:tag="@string/Delete"
         />
     <TextView
         android:id="@+id/textViewWorkoutTool"
@@ -62,26 +64,30 @@
         android:fontFamily="@font/infected"
         app:autoSizeTextType="uniform"
         />
+
     <ScrollView
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/Transparent"
+        app:layout_constraintBottom_toTopOf="@id/timerLayout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textViewWorkoutTool"
-        app:layout_constraintVertical_bias="0.00"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/Transparent">
+        app:layout_constraintVertical_bias="0.00">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutPushUps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/dimDimGray"
                 android:layout_margin="5dp"
+                android:background="@color/dimDimGray"
                 android:visibility="visible">
 
                 <ImageView
@@ -89,16 +95,16 @@
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:background="@color/black"
+                    android:contentDescription="@string/PushUps"
+                    android:onClick="onClickClear"
                     android:src="@drawable/pushups"
+                    android:tag="@string/PushUps"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.00"
-                    android:contentDescription="@string/PushUps"
-                    android:onClick="onClickClear"
-                    android:tag="@string/PushUps"/>
+                    app:layout_constraintVertical_bias="0.00" />
 
                 <Button
                     android:id="@+id/btnIncPushUps"
@@ -107,6 +113,8 @@
                     android:background="@drawable/workout_round_button"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
+                    android:onClick="onClickAdd"
+                    android:tag="@string/PushUps"
                     android:text="@string/increase"
                     android:textAlignment="center"
                     android:textColor="@color/white"
@@ -117,9 +125,7 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    android:onClick="onClickAdd"
-                    android:tag="@string/PushUps"/>
+                    tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <EditText
                     android:id="@+id/editTextIncDecPushUps"
@@ -145,6 +151,8 @@
                     android:background="@drawable/workout_round_button"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
+                    android:onClick="onClickSubtract"
+                    android:tag="@string/PushUps"
                     android:text="@string/decrease"
                     android:textAlignment="center"
                     android:textColor="@color/white"
@@ -155,78 +163,78 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecPushUps"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    android:onClick="onClickSubtract"
-                    android:tag="@string/PushUps"/>
+                    tools:ignore="DuplicateSpeakableTextCheck" />
+
                 <TextView
                     android:id="@+id/textPushUps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/initialValue0"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewPushUps"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="0.05"
-                    android:text="@string/initialValue0"
-                    android:textSize="30sp"
-                    android:textColor="@color/white"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutPullUps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/dimDimGray"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:background="@color/dimDimGray">
+
                 <ImageView
                     android:id="@+id/imageViewPullUps"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:background="@color/black"
+                    android:contentDescription="@string/PullUps"
+                    android:onClick="onClickClear"
                     android:src="@drawable/pullups"
+                    android:tag="@string/PullUps"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="0.00"
-                    app:layout_constraintVertical_bias="0.00"
-                    android:contentDescription="@string/PullUps"
-                    android:onClick="onClickClear"
-                    android:tag="@string/PullUps"
-                    />
+                    app:layout_constraintVertical_bias="0.00" />
+
                 <TextView
                     android:id="@+id/textPullUps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/initialValue0"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewPullUps"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="0.05"
-                    android:text="@string/initialValue0"
-                    android:textSize="30sp"
-                    android:textColor="@color/white"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <Button
                     android:id="@+id/btnIncPullUps"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/workout_round_button"
-                    app:backgroundTint="@null"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="onClickAdd"
+                    android:tag="@string/PullUps"
                     android:text="@string/increase"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    android:textAlignment="center"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:onClick="onClickAdd"
-                    android:tag="@string/PullUps"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/editTextIncDecPullUps"
@@ -244,81 +252,85 @@
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPullUps"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TextContrastCheck" />
+
                 <Button
                     android:id="@+id/btnDecPullUps"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/workout_round_button"
-                    app:backgroundTint="@null"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="onClickSubtract"
+                    android:tag="@string/PullUps"
                     android:text="@string/decrease"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    android:textAlignment="center"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecPullUps"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00"
-                    android:onClick="onClickSubtract"
-                    android:tag="@string/PullUps"/>
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutDips"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/dimDimGray"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:background="@color/dimDimGray">
+
                 <ImageView
                     android:id="@+id/imageViewDips"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:background="@color/black"
+                    android:contentDescription="@string/Dips"
+                    android:onClick="onClickClear"
                     android:src="@drawable/dips"
+                    android:tag="@string/Dips"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="0.00"
-                    app:layout_constraintVertical_bias="0.00"
-                    android:contentDescription="@string/Dips"
-                    android:onClick="onClickClear"
-                    android:tag="@string/Dips"
-                    />
+                    app:layout_constraintVertical_bias="0.00" />
+
                 <TextView
                     android:id="@+id/textDips"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@string/initialValue0"
+                    android:textColor="@color/white"
+                    android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewDips"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="0.05"
-                    android:text="@string/initialValue0"
-                    android:textSize="30sp"
-                    android:textColor="@color/white"
 
                     />
+
                 <Button
                     android:id="@+id/btnIncDips"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/workout_round_button"
-                    app:backgroundTint="@null"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="onClickAdd"
+                    android:tag="@string/Dips"
                     android:text="@string/increase"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    android:textAlignment="center"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:onClick="onClickAdd"
-                    android:tag="@string/Dips"/>
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/editTextIncDecDips"
@@ -336,26 +348,88 @@
                     app:layout_constraintRight_toLeftOf="@+id/btnIncDips"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TextContrastCheck" />
+
                 <Button
                     android:id="@+id/btnDecDips"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/workout_round_button"
-                    app:backgroundTint="@null"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:onClick="onClickSubtract"
+                    android:tag="@string/Dips"
                     android:text="@string/decrease"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    android:textAlignment="center"
+                    app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="1.00"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecDips"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintHorizontal_bias="1.00"
-                    android:onClick="onClickSubtract"
-                    android:tag="@string/Dips"/>
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
+
+    <LinearLayout
+        android:id="@+id/timerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/cChronometer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:background="@null"
+            android:text="@string/initialValueTime"
+            android:textColor="@color/white"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:textAlignment="center" />
+
+        <ImageButton
+            android:id="@+id/buttonPlayTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:background="@null"
+            android:onClick="startChronometer"
+            android:src="@drawable/ic_play"
+            android:visibility="visible"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:contentDescription="@string/Play" />
+        <ImageButton
+            android:id="@+id/buttonPauseTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:visibility="gone"
+            android:background="@null"
+            android:onClick="pauseChronometer"
+            android:src="@drawable/ic_pause"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:contentDescription="@string/Pause"/>
+
+        <ImageButton
+            android:id="@+id/buttonResetTimer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:background="@null"
+            android:onClick="resetChronometer"
+            android:src="@drawable/ic_stop"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            tools:ignore="SpeakableTextPresentCheck"
+            android:contentDescription="@string/Reset"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
