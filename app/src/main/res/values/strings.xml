@@ -50,4 +50,5 @@
     <string name="Play">Play</string>
     <string name="Pause">Pause</string>
     <string name="Reset">Reset</string>
+    <string name="Expand">Expand</string>
 </resources>

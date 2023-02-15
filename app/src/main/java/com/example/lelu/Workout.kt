@@ -2,6 +2,7 @@ package com.example.lelu
 
 import android.app.Activity
 import android.os.Bundle
+import android.text.Html
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AlertDialog
@@ -52,6 +53,7 @@ class Workout : AppCompatActivity() {
                 if (binding.editTextIncDecPushUps.text.toString() == ""){
                     binding.textPushUps.text = "0"
                     binding.textPushUps.clearFocus()
+                    pushUpsCounter = 0
                 }
                 binding.editTextIncDecPushUps.text.clear()
                 binding.editTextIncDecPushUps.clearFocus()
@@ -60,6 +62,7 @@ class Workout : AppCompatActivity() {
                 if(binding.editTextIncDecPullUps.text.toString() == ""){
                     binding.textPullUps.text = "0"
                     binding.textPullUps.clearFocus()
+                    pullUpsCounter = 0
                 }
                 binding.editTextIncDecPullUps.text.clear()
                 binding.editTextIncDecPullUps.clearFocus()
@@ -68,6 +71,7 @@ class Workout : AppCompatActivity() {
                 if(binding.editTextIncDecDips.text.toString() == ""){
                     binding.textDips.text = "0"
                     binding.textDips.clearFocus()
+                    dipsCounter = 0
                 }
                 binding.editTextIncDecDips.text.clear()
                 binding.editTextIncDecDips.clearFocus()
@@ -76,7 +80,8 @@ class Workout : AppCompatActivity() {
                 val builder = AlertDialog.Builder(this@Workout)
                 builder.setMessage("Are you sure you want to Delete")
                     .setCancelable(false)
-                    .setPositiveButton("yes") { dialog, id ->
+                        //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
+                    .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { dialog, id ->
                         //clear push ups
                         binding.textPushUps.text = "0"
                         binding.textPushUps.clearFocus()
@@ -92,8 +97,12 @@ class Workout : AppCompatActivity() {
                         binding.textDips.clearFocus()
                         binding.editTextIncDecDips.text.clear()
                         binding.editTextIncDecDips.clearFocus()
+                        //set counters to zero
+                        pushUpsCounter = 0
+                        pullUpsCounter = 0
+                        dipsCounter = 0
                     }
-                    .setNegativeButton("No") { dialog, id -> dialog.dismiss()}
+                    .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { dialog, id -> dialog.dismiss()}
                 val alter = builder.create()
                 alter.show()
             }

@@ -63,6 +63,10 @@
         android:textColor="@color/blue"
         android:fontFamily="@font/infected"
         app:autoSizeTextType="uniform"
+        android:shadowColor="@color/blue"
+        android:shadowDx="0.0"
+        android:shadowDy="0.0"
+        android:shadowRadius="8"
         />
 
     <ScrollView
@@ -105,7 +109,37 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.00" />
+                <TextView
+                    android:id="@+id/textPushUps"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/initialValue0"
+                    android:textColor="@color/blue"
+                    android:textSize="30sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintLeft_toRightOf="@+id/imageViewPushUps"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <ImageButton
+                    android:id="@+id/buttonExpandPushUps"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/workout_round_button"
+                    android:contentDescription="@string/Expand"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:scaleType="fitCenter"
+                    android:scaleX="0.6"
+                    android:scaleY="0.5"
+                    android:src="@drawable/downarrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/imageViewPushUps"
+                    app:layout_constraintRight_toLeftOf="@+id/btnIncPushUps"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.00"
+                    tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
                 <Button
                     android:id="@+id/btnIncPushUps"
                     android:layout_width="wrap_content"
@@ -126,7 +160,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="DuplicateSpeakableTextCheck" />
-
                 <EditText
                     android:id="@+id/editTextIncDecPushUps"
                     android:layout_width="wrap_content"
@@ -143,7 +176,6 @@
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPushUps"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
-
                 <Button
                     android:id="@+id/btnDecPushUps"
                     android:layout_width="wrap_content"
@@ -164,20 +196,6 @@
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecPushUps"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="DuplicateSpeakableTextCheck" />
-
-                <TextView
-                    android:id="@+id/textPushUps"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/initialValue0"
-                    android:textColor="@color/white"
-                    android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="0.05"
-                    app:layout_constraintLeft_toRightOf="@+id/imageViewPushUps"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -208,13 +226,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/initialValue0"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blue"
                     android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewPullUps"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+                <ImageButton
+                    android:id="@+id/buttonExpandPullUps"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/workout_round_button"
+                    android:contentDescription="@string/Expand"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:scaleType="fitCenter"
+                    android:scaleX="0.6"
+                    android:scaleY="0.5"
+                    android:src="@drawable/downarrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/imageViewPullUps"
+                    app:layout_constraintRight_toLeftOf="@+id/btnIncPullUps"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.00"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <Button
                     android:id="@+id/btnIncPullUps"
@@ -302,15 +338,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/initialValue0"
-                    android:textColor="@color/white"
+                    android:textColor="@color/blue"
                     android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.05"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewDips"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-
                     />
+                <ImageButton
+                    android:id="@+id/buttonExpandDips"
+                    android:layout_width="50dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/workout_round_button"
+                    android:contentDescription="@string/Expand"
+                    android:minWidth="0dp"
+                    android:minHeight="0dp"
+                    android:scaleType="fitCenter"
+                    android:scaleX="0.6"
+                    android:scaleY="0.5"
+                    android:src="@drawable/downarrow"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@+id/imageViewDips"
+                    app:layout_constraintRight_toLeftOf="@+id/btnIncDips"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.00"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <Button
                     android:id="@+id/btnIncDips"
@@ -398,8 +451,8 @@
         <ImageButton
             android:id="@+id/buttonPlayTimer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:layout_weight="0.15"
             android:background="@null"
             android:onClick="startChronometer"
             android:src="@drawable/ic_play"
@@ -409,8 +462,8 @@
         <ImageButton
             android:id="@+id/buttonPauseTimer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:layout_weight="0.15"
             android:visibility="gone"
             android:background="@null"
             android:onClick="pauseChronometer"
@@ -422,8 +475,8 @@
         <ImageButton
             android:id="@+id/buttonResetTimer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
+            android:layout_height="match_parent"
+            android:layout_weight="0.15"
             android:background="@null"
             android:onClick="resetChronometer"
             android:src="@drawable/ic_stop"
