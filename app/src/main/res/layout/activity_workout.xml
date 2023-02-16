@@ -22,11 +22,53 @@
         android:maxHeight="70dp"
         android:scaleType="fitCenter"
         android:src="@drawable/backicon"
-        android:background="@color/Transparent"
+        android:background="@drawable/workout_round_button"
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/GoBack"
         android:onClick="onClickGoBack"/>
+    <ImageButton
+        android:id="@+id/btnWorkoutHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="70dp"
+        android:maxWidth="70dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/history"
+        android:background="@drawable/workout_round_button"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toRightOf="@id/btnGoBack"
+        app:layout_constraintRight_toLeftOf="@id/btnSaveWorkout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.00"
+        app:layout_constraintHorizontal_bias="1.00"
+        android:contentDescription="@string/History"
+        android:onClick="onClickSeeHistory"/>
+    <ImageButton
+        android:id="@+id/btnSaveWorkout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxHeight="70dp"
+        android:maxWidth="70dp"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/save"
+        android:background="@drawable/workout_round_button"
+        app:backgroundTint="@null"
+        app:layout_constraintLeft_toRightOf="@id/btnGoBack"
+        app:layout_constraintRight_toLeftOf="@id/btnDeleteAll"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.00"
+        app:layout_constraintHorizontal_bias="1.00"
+        android:contentDescription="@string/Save"
+        android:onClick="onClickSave"/>
     <ImageButton
         android:id="@+id/btnDeleteAll"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -41,7 +83,7 @@
         android:maxWidth="70dp"
         android:scaleType="fitCenter"
         android:src="@drawable/delete"
-        android:background="@color/Transparent"
+        android:background="@drawable/workout_round_button"
         android:layout_margin="5dp"
         android:adjustViewBounds="true"
         android:contentDescription="@string/Delete"
@@ -94,6 +136,7 @@
                 android:background="@color/dimDimGray"
                 android:visibility="visible">
 
+
                 <ImageView
                     android:id="@+id/imageViewPushUps"
                     android:layout_width="70dp"
@@ -118,27 +161,31 @@
                     android:textSize="30sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="15dp"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewPushUps"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
                 <ImageButton
                     android:id="@+id/buttonExpandPushUps"
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/workout_round_button"
+                    android:onClick="onClickExpand"
+                    android:tag="@string/PushUps"
+                    android:src="@drawable/downarrow"
                     android:contentDescription="@string/Expand"
+                    android:background="@drawable/workout_round_button"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
                     android:scaleType="fitCenter"
-                    android:scaleX="0.6"
-                    android:scaleY="0.5"
-                    android:src="@drawable/downarrow"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:scaleX="0.8"
+                    android:scaleY="0.7"
+                    app:layout_constraintVertical_bias="1.00"
+                    app:layout_constraintBottom_toTopOf="@id/expandLayoutPushUps"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewPushUps"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPushUps"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.00"
+                    android:visibility="gone"
                     tools:ignore="TouchTargetSizeCheck,DuplicateSpeakableTextCheck" />
                 <Button
                     android:id="@+id/btnIncPushUps"
@@ -156,6 +203,8 @@
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -171,7 +220,9 @@
                     android:textColor="@color/white"
                     android:textColorHint="@color/dimGray"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="15dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPushUps"
                     app:layout_constraintTop_toTopOf="parent"
@@ -191,11 +242,30 @@
                     android:textSize="25sp"
                     app:backgroundTint="@null"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="10dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecPushUps"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="DuplicateSpeakableTextCheck" />
+
+<!--                empty linear layout-->
+                <LinearLayout
+                    android:id="@+id/expandLayoutPushUps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewPushUps"
+                    app:layout_constraintVertical_bias="1.00"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -220,7 +290,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.00" />
-
                 <TextView
                     android:id="@+id/textPullUps"
                     android:layout_width="wrap_content"
@@ -228,50 +297,55 @@
                     android:text="@string/initialValue0"
                     android:textColor="@color/blue"
                     android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewPullUps"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
                 <ImageButton
                     android:id="@+id/buttonExpandPullUps"
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
+                    android:onClick="onClickExpand"
+                    android:tag="@string/PullUps"
                     android:background="@drawable/workout_round_button"
+                    android:src="@drawable/downarrow"
                     android:contentDescription="@string/Expand"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
                     android:scaleType="fitCenter"
-                    android:scaleX="0.6"
-                    android:scaleY="0.5"
-                    android:src="@drawable/downarrow"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:scaleX="0.8"
+                    android:scaleY="0.7"
+                    app:layout_constraintVertical_bias="1.00"
+                    app:layout_constraintBottom_toTopOf="@+id/expandLayoutPullUps"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewPullUps"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPullUps"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.00"
+                    android:visibility="gone"
                     tools:ignore="TouchTargetSizeCheck" />
-
                 <Button
                     android:id="@+id/btnIncPullUps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/workout_round_button"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
+                    android:background="@drawable/workout_round_button"
+                    app:backgroundTint="@null"
                     android:onClick="onClickAdd"
                     android:tag="@string/PullUps"
                     android:text="@string/increase"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
                 <EditText
                     android:id="@+id/editTextIncDecPullUps"
                     android:layout_width="wrap_content"
@@ -282,32 +356,51 @@
                     android:inputType="number"
                     android:textColor="@color/white"
                     android:textColorHint="@color/dimGray"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncPullUps"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TextContrastCheck" />
-
                 <Button
                     android:id="@+id/btnDecPullUps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/workout_round_button"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
+                    android:background="@drawable/workout_round_button"
+                    app:backgroundTint="@null"
                     android:onClick="onClickSubtract"
                     android:tag="@string/PullUps"
                     android:text="@string/decrease"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="25sp"
-                    app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecPullUps"
                     app:layout_constraintTop_toTopOf="parent" />
+
+<!--                empty linear layout-->
+                <LinearLayout
+                    android:id="@+id/expandLayoutPullUps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewPullUps"
+                    app:layout_constraintVertical_bias="1.00"
+                    android:orientation="horizontal">
+
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -332,7 +425,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.00" />
-
                 <TextView
                     android:id="@+id/textDips"
                     android:layout_width="wrap_content"
@@ -340,31 +432,35 @@
                     android:text="@string/initialValue0"
                     android:textColor="@color/blue"
                     android:textSize="30sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="0.05"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewDips"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     />
                 <ImageButton
                     android:id="@+id/buttonExpandDips"
-                    android:layout_width="50dp"
-                    android:layout_height="30dp"
+                    android:onClick="onClickExpand"
+                    android:tag="@string/Dips"
                     android:background="@drawable/workout_round_button"
                     android:contentDescription="@string/Expand"
+                    android:layout_width="60dp"
+                    android:layout_height="35dp"
                     android:minWidth="0dp"
                     android:minHeight="0dp"
                     android:scaleType="fitCenter"
-                    android:scaleX="0.6"
-                    android:scaleY="0.5"
+                    android:scaleX="0.8"
+                    android:scaleY="0.7"
                     android:src="@drawable/downarrow"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintVertical_bias="1.00"
+                    app:layout_constraintBottom_toTopOf="@+id/expandLayoutDips"
                     app:layout_constraintLeft_toRightOf="@+id/imageViewDips"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncDips"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.00"
+                    android:visibility="gone"
                     tools:ignore="TouchTargetSizeCheck" />
-
                 <Button
                     android:id="@+id/btnIncDips"
                     android:layout_width="wrap_content"
@@ -379,12 +475,13 @@
                     android:textColor="@color/white"
                     android:textSize="25sp"
                     app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
                 <EditText
                     android:id="@+id/editTextIncDecDips"
                     android:layout_width="wrap_content"
@@ -395,13 +492,14 @@
                     android:inputType="number"
                     android:textColor="@color/white"
                     android:textColorHint="@color/dimGray"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="15dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/btnIncDips"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="TextContrastCheck" />
-
                 <Button
                     android:id="@+id/btnDecDips"
                     android:layout_width="wrap_content"
@@ -416,11 +514,30 @@
                     android:textColor="@color/white"
                     android:textSize="25sp"
                     app:backgroundTint="@null"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintHorizontal_bias="1.00"
+                    app:layout_constraintVertical_bias="0.00"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toLeftOf="@+id/editTextIncDecDips"
                     app:layout_constraintTop_toTopOf="parent" />
+
+<!--                empty linear layout-->
+                <LinearLayout
+                    android:id="@+id/expandLayoutDips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/imageViewDips"
+                    app:layout_constraintVertical_bias="1.00"
+                    android:orientation="horizontal">
+
+
+                </LinearLayout>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
@@ -447,14 +564,14 @@
             android:textSize="40sp"
             android:textStyle="bold"
             android:textAlignment="center" />
-
         <ImageButton
             android:id="@+id/buttonPlayTimer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.15"
             android:background="@null"
-            android:onClick="startChronometer"
+            android:onClick="onClickChronometer"
+            android:tag="@string/Play"
             android:src="@drawable/ic_play"
             android:visibility="visible"
             tools:ignore="SpeakableTextPresentCheck"
@@ -466,23 +583,25 @@
             android:layout_weight="0.15"
             android:visibility="gone"
             android:background="@null"
-            android:onClick="pauseChronometer"
+            android:onClick="onClickChronometer"
+            android:tag="@string/Pause"
             android:src="@drawable/ic_pause"
             android:textColor="@color/black"
             android:textSize="20sp"
             android:contentDescription="@string/Pause"/>
-
         <ImageButton
             android:id="@+id/buttonResetTimer"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.15"
             android:background="@null"
-            android:onClick="resetChronometer"
+            android:onClick="onClickChronometer"
+            android:tag="@string/Reset"
             android:src="@drawable/ic_stop"
             android:textColor="@color/black"
             android:textSize="20sp"
             tools:ignore="SpeakableTextPresentCheck"
             android:contentDescription="@string/Reset"/>
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

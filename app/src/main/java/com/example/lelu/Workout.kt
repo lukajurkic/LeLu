@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.lelu.databinding.ActivityWorkoutBinding
 import java.util.*
+import kotlin.math.roundToInt
 
 //toast: Toast.makeText(applicationContext,"message", Toast.LENGTH_LONG).show()
 
@@ -17,14 +18,20 @@ class Workout : AppCompatActivity() {
 
     private lateinit var binding: ActivityWorkoutBinding
 
-    private var pushUpsCounter = 0
-    private var pullUpsCounter = 0
-    private var dipsCounter = 0
+    //counters (dictionary)
+    private val counters = mutableMapOf<String, Int>()
 
-    var timer = Timer()
-    var timerTask: TimerTask? = null
+    private var timer = Timer()
+    private var timerTask: TimerTask? = null
     private var time = 0.0f
     private var running = false
+
+    private var saved = false
+    private var id = -1 //id of workout, -1 if not saved, other number if saved
+    private val maxReps = 9999
+
+    //checking for each layer if expanded
+    private val expanded = mutableMapOf<String,Boolean>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,20 +47,66 @@ class Workout : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.black)
 
-    }
+        //adding values to dictionary: name.put(K,V) or name[K] = V
+        expanded[resources.getString(R.string.PushUps)] = false
+        expanded[resources.getString(R.string.PullUps)] = false
+        expanded[resources.getString(R.string.Dips)] = false
 
-    //reset's individual workout layout
-    fun onClickClear(view: View){
-        val tag:String = view.tag.toString()
-        onClickClear(tag)
+        //initialising counters
+        resetCounters()
+
     }
-    private fun onClickClear(tag : String){
-        when(tag){
+    //expand methods -- currently unused
+     fun onClickExpand(view: View){
+        when(val tag: String = view.tag.toString()){
+            resources.getString(R.string.PushUps) -> {
+                if (expanded[tag] == true) {
+                    binding.expandLayoutPushUps.visibility = View.GONE
+                    expanded[tag] = false
+                    binding.buttonExpandPushUps.rotation = 0F
+                }
+                else {
+                    binding.expandLayoutPushUps.visibility = View.VISIBLE
+                    expanded[tag] = true
+                    binding.buttonExpandPushUps.rotation = 180F
+                }
+            }
+            resources.getString(R.string.PullUps) -> {
+                if (expanded[tag] == true) {
+                    binding.expandLayoutPullUps.visibility = View.GONE
+                    expanded[tag] = false
+                    binding.buttonExpandPullUps.rotation = 0F
+                }
+                else {
+                    binding.expandLayoutPullUps.visibility = View.VISIBLE
+                    expanded[tag] = true
+                    binding.buttonExpandPullUps.rotation = 180F
+                }
+            }
+            resources.getString(R.string.Dips) -> {
+                if (expanded[tag] == true) {
+                    binding.expandLayoutDips.visibility = View.GONE
+                    expanded[tag] = false
+                    binding.buttonExpandDips.rotation = 0F
+                }
+                else {
+                    binding.expandLayoutDips.visibility = View.VISIBLE
+                    expanded[tag] = true
+                    binding.buttonExpandDips.rotation = 180F
+                }
+            }
+            else -> {}
+        }
+     }
+
+    //safe resets workout
+    fun onClickClear(view: View) {
+        when(view.tag.toString()){
             resources.getString(R.string.PushUps) -> {
                 if (binding.editTextIncDecPushUps.text.toString() == ""){
                     binding.textPushUps.text = "0"
                     binding.textPushUps.clearFocus()
-                    pushUpsCounter = 0
+                    counters[resources.getString(R.string.PushUps)] = 0
                 }
                 binding.editTextIncDecPushUps.text.clear()
                 binding.editTextIncDecPushUps.clearFocus()
@@ -62,7 +115,7 @@ class Workout : AppCompatActivity() {
                 if(binding.editTextIncDecPullUps.text.toString() == ""){
                     binding.textPullUps.text = "0"
                     binding.textPullUps.clearFocus()
-                    pullUpsCounter = 0
+                    counters[resources.getString(R.string.PullUps)] = 0
                 }
                 binding.editTextIncDecPullUps.text.clear()
                 binding.editTextIncDecPullUps.clearFocus()
@@ -71,38 +124,23 @@ class Workout : AppCompatActivity() {
                 if(binding.editTextIncDecDips.text.toString() == ""){
                     binding.textDips.text = "0"
                     binding.textDips.clearFocus()
-                    dipsCounter = 0
+                    counters[resources.getString(R.string.Dips)] = 0
                 }
                 binding.editTextIncDecDips.text.clear()
                 binding.editTextIncDecDips.clearFocus()
             }
             resources.getString(R.string.Delete) -> {
                 val builder = AlertDialog.Builder(this@Workout)
-                builder.setMessage("Are you sure you want to Delete")
-                    .setCancelable(false)
-                        //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
-                    .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { dialog, id ->
-                        //clear push ups
-                        binding.textPushUps.text = "0"
-                        binding.textPushUps.clearFocus()
-                        binding.editTextIncDecPushUps.text.clear()
-                        binding.editTextIncDecPushUps.clearFocus()
-                        //clear pull ups
-                        binding.textPullUps.text = "0"
-                        binding.textPullUps.clearFocus()
-                        binding.editTextIncDecPullUps.text.clear()
-                        binding.editTextIncDecPullUps.clearFocus()
-                        //clear dips
-                        binding.textDips.text = "0"
-                        binding.textDips.clearFocus()
-                        binding.editTextIncDecDips.text.clear()
-                        binding.editTextIncDecDips.clearFocus()
-                        //set counters to zero
-                        pushUpsCounter = 0
-                        pullUpsCounter = 0
-                        dipsCounter = 0
+                builder
+                    .setTitle("Delete workout")
+                    .setMessage("Are you sure you want to delete without saving?")
+                    .setNeutralButton(Html.fromHtml("<font color='#2680FF'>Cancel</font>")) { dialog, _ -> dialog.dismiss()}
+                    //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
+                    .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { _, _ -> resetCounters() }
+                    .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { _, _ ->
+                        onClickSave(view)
+                        resetCounters()
                     }
-                    .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { dialog, id -> dialog.dismiss()}
                 val alter = builder.create()
                 alter.show()
             }
@@ -112,35 +150,40 @@ class Workout : AppCompatActivity() {
 
     //adds repetitions
     fun onClickAdd(view: View){
-        val tag:String = view.tag.toString()
-        onClickAdd(tag)
-    }
-    private fun onClickAdd(tag: String){
+        saved = false
         //when == switch case
-        when(tag){
+        when(view.tag.toString()){
             resources.getString(R.string.PushUps) -> {
                 if(binding.editTextIncDecPushUps.text.toString() != ""){
-                    if(pushUpsCounter <= 9999)pushUpsCounter += Integer.parseInt(binding.editTextIncDecPushUps.text.toString())
+                    if(counters[resources.getString(R.string.PushUps)]!! <= maxReps)
+                    //dictionaryName[Key] += newValue
+                        counters.inc(resources.getString(R.string.PushUps), Integer.parseInt(binding.editTextIncDecPushUps.text.toString()))
                 }else{
-                    if(pushUpsCounter <= 9999)pushUpsCounter++
+                    if(counters[resources.getString(R.string.PushUps)]!! <= maxReps)
+                    //dictionaryName[Key]++
+                        counters.inc(resources.getString(R.string.PushUps), 1)
                 }
-                binding.textPushUps.text = pushUpsCounter.toString()
+                binding.textPushUps.text = counters[resources.getString(R.string.PushUps)].toString()
             }
             resources.getString(R.string.PullUps) -> {
                 if(binding.editTextIncDecPullUps.text.toString() != ""){
-                    if(pullUpsCounter <= 9999)pullUpsCounter += Integer.parseInt(binding.editTextIncDecPullUps.text.toString())
+                    if(counters[resources.getString(R.string.PullUps)]!! <= maxReps)
+                        counters.inc(resources.getString(R.string.PullUps), Integer.parseInt(binding.editTextIncDecPullUps.text.toString()))
                 }else{
-                    if(pullUpsCounter <= 9999)pullUpsCounter++
+                    if(counters[resources.getString(R.string.PullUps)]!! <= maxReps)
+                        counters.inc(resources.getString(R.string.PullUps), 1)
                 }
-                binding.textPullUps.text = pullUpsCounter.toString()
+                binding.textPullUps.text = counters[resources.getString(R.string.PullUps)].toString()
             }
             resources.getString(R.string.Dips) -> {
                 if(binding.editTextIncDecDips.text.toString() != ""){
-                    if(dipsCounter <= 9999)dipsCounter += Integer.parseInt(binding.editTextIncDecDips.text.toString())
+                    if(counters[resources.getString(R.string.Dips)]!! <= maxReps)
+                        counters.inc(resources.getString(R.string.Dips), Integer.parseInt(binding.editTextIncDecDips.text.toString()))
                 }else{
-                    if(dipsCounter <= 9999)dipsCounter++
+                    if(counters[resources.getString(R.string.Dips)]!! <= maxReps)
+                        counters.inc(resources.getString(R.string.Dips), 1)
                 }
-                binding.textDips.text = dipsCounter.toString()
+                binding.textDips.text = counters[resources.getString(R.string.Dips)].toString()
             }
             else -> { }
         }
@@ -148,69 +191,79 @@ class Workout : AppCompatActivity() {
 
     //subtracts repetitions
     fun onClickSubtract(view: View){
-        val tag:String = view.tag.toString()
-        onClickSubtract(tag)
-    }
-    private fun onClickSubtract(tag: String){
-        when(tag){
+        saved = false
+        when(view.tag.toString()){
             resources.getString(R.string.PushUps) -> {
                 if(binding.editTextIncDecPushUps.text.toString() != ""){
                     val toSubtract = Integer.parseInt(binding.editTextIncDecPushUps.text.toString())
-                    if(pushUpsCounter - toSubtract >= 0)pushUpsCounter -= toSubtract
-                    else pushUpsCounter = 0;
+                    if(counters[resources.getString(R.string.PushUps)]!! - toSubtract >= 0)
+                        counters.inc(resources.getString(R.string.PushUps), -toSubtract)
+                    else counters[resources.getString(R.string.PushUps)] = 0
                 }else{
-                    if(pushUpsCounter >= 1)pushUpsCounter--
+                    if(counters[resources.getString(R.string.PushUps)]!! >= 1)
+                        counters.inc(resources.getString(R.string.PushUps), -1)
                 }
-                binding.textPushUps.text = pushUpsCounter.toString()
+                binding.textPushUps.text = counters[resources.getString(R.string.PushUps)].toString()
             }
             resources.getString(R.string.PullUps) -> {
                 if(binding.editTextIncDecPullUps.text.toString() != ""){
                     val toSubtract = Integer.parseInt(binding.editTextIncDecPullUps.text.toString())
-                    if(pullUpsCounter - toSubtract >= 0)pullUpsCounter -= toSubtract
-                    else pullUpsCounter = 0;
+                    if(counters[resources.getString(R.string.PullUps)]!! - toSubtract >= 0)
+                        counters.inc(resources.getString(R.string.PullUps), -toSubtract)
+                    else counters[resources.getString(R.string.PullUps)] = 0
                 }else{
-                    if(pullUpsCounter >= 1)pullUpsCounter--
+                    if(counters[resources.getString(R.string.PullUps)]!! >= 1)
+                        counters.inc(resources.getString(R.string.PullUps), -1)
                 }
-                binding.textPullUps.text = pullUpsCounter.toString()
+                binding.textPullUps.text = counters[resources.getString(R.string.PullUps)].toString()
             }
             resources.getString(R.string.Dips) -> {
                 if(binding.editTextIncDecDips.text.toString() != ""){
                     val toSubtract = Integer.parseInt(binding.editTextIncDecDips.text.toString())
-                    if(dipsCounter - toSubtract >= 0)dipsCounter -= toSubtract
-                    else dipsCounter = 0;
+                    if(counters[resources.getString(R.string.Dips)]!! - toSubtract >= 0)
+                        counters.inc(resources.getString(R.string.Dips), -toSubtract)
+                    else counters[resources.getString(R.string.Dips)] = 0
                 }else{
-                    if(dipsCounter >= 1)dipsCounter--
+                    if(counters[resources.getString(R.string.Dips)]!! >= 1)
+                        counters.inc(resources.getString(R.string.Dips), -1)
                 }
-                binding.textDips.text = dipsCounter.toString()
+                binding.textDips.text = counters[resources.getString(R.string.Dips)].toString()
             }
             else -> { }
         }
     }
 
     //timer methods
+    fun onClickChronometer(view: View){
+        when(view.tag.toString()){
+            resources.getString(R.string.Pause) -> pauseChronometer()
+            resources.getString(R.string.Play) -> startChronometer()
+            resources.getString(R.string.Reset) -> resetChronometer()
+        }
+    }
     private fun startTimer(){
         timerTask = object : TimerTask() {
             override fun run() {
                 (this@Workout as Activity).runOnUiThread {
                     time++
-                    binding.cChronometer.setText(getTimerText())
+                    binding.cChronometer.text = getTimerText()
                 }
             }
         }
         timer.scheduleAtFixedRate(timerTask, 0, 1000)
     }
-    private fun getTimerText(): String? {
-        val rounded = Math.round(time)
+    private fun getTimerText(): String {
+        val rounded = time.roundToInt()
         val seconds = rounded % 86400 % 3600 % 60
         val minutes = rounded % 86400 % 3600 / 60
         val hours = rounded % 86400 / 3600
         return formatTime(seconds, minutes, hours)
     }
-    private fun formatTime(seconds: Int, minutes: Int, hours: Int): String? {
+    private fun formatTime(seconds: Int, minutes: Int, hours: Int): String {
         return String.format("%02d", hours) + ":" + String.format(
             "%02d", minutes) + ":" + String.format("%02d", seconds)
     }
-    fun pauseChronometer(view: View){
+    private fun pauseChronometer(){
         if(running){
             timerTask?.cancel()
             running = false
@@ -218,7 +271,7 @@ class Workout : AppCompatActivity() {
             binding.buttonPauseTimer.visibility = View.GONE
         }
     }
-    fun resetChronometer(view: View){
+    private fun resetChronometer(){
         if(timerTask != null){
             timerTask!!.cancel()
             running = false
@@ -228,7 +281,7 @@ class Workout : AppCompatActivity() {
             binding.buttonPauseTimer.visibility = View.GONE
         }
     }
-    fun startChronometer(view: View){
+    private fun startChronometer(){
         if(!running){
             startTimer()
             running = true
@@ -239,6 +292,65 @@ class Workout : AppCompatActivity() {
 
     //goes back to main manu
     fun onClickGoBack(view: View){
-        finish()
+        if(saved){
+            finish()
+        }
+        else {
+            val builder = AlertDialog.Builder(this@Workout)
+            builder.setMessage("Do you want to save changes to 'workoutName'")
+                .setTitle("Workout tool")
+                .setNeutralButton(Html.fromHtml("<font color='#2680FF'>Cancel</font>")) { dialog, _ -> dialog.dismiss()}
+                //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
+                .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { _, _ -> finish() }
+                .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { _, _ -> onClickSave(view) }
+            val alter = builder.create()
+            alter.show()
+        }
+
     }
+
+    fun onClickSave(view: View) {
+        if(!saved){
+            if(id == -1) {
+                //save workout
+            }
+            else{
+                //update workout
+            }
+        }
+        saved = true
+    }
+
+    fun onClickSeeHistory(view: View){
+        //implement shoving history of workouts, from database
+    }
+
+    private fun resetCounters(){
+        //clear push ups
+        binding.textPushUps.text = "0"
+        binding.textPushUps.clearFocus()
+        binding.editTextIncDecPushUps.text.clear()
+        binding.editTextIncDecPushUps.clearFocus()
+        //clear pull ups
+        binding.textPullUps.text = "0"
+        binding.textPullUps.clearFocus()
+        binding.editTextIncDecPullUps.text.clear()
+        binding.editTextIncDecPullUps.clearFocus()
+        //clear dips
+        binding.textDips.text = "0"
+        binding.textDips.clearFocus()
+        binding.editTextIncDecDips.text.clear()
+        binding.editTextIncDecDips.clearFocus()
+        //set counters to zero
+        counters[resources.getString(R.string.PushUps)] = 0
+        counters[resources.getString(R.string.PullUps)] = 0
+        counters[resources.getString(R.string.Dips)] = 0
+    }
+
+    //my method for increasing value in dictionary, source:
+    //https://stackoverflow.com/questions/53826903/increase-value-in-mutable-map
+    fun <T> MutableMap<T, Int>.inc(key: T, more: Int = 1) = merge(key, more, Int::plus)
+    fun <T> MutableMap<T, Int>.dec(key: T, more: Int = 1) = merge(key, more, Int::minus)
+
 }
+

@@ -11,6 +11,9 @@
     <string name="ComingSoon">&#8230;</string>
     <string name="GoBack">GoBack</string>
     <string name="Delete">Delete</string>
+    <string name="Save">Save</string>
+    <string name="History">History</string>
+    <string name="Update">Update</string>
 
     <!--Content description-->
     <string name="RandomTool">Random tool</string>
