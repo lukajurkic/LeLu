@@ -12,14 +12,86 @@ import com.example.lelu.databinding.ActivityWorkoutBinding
 import java.util.*
 import kotlin.math.roundToInt
 
+
 //toast: Toast.makeText(applicationContext,"message", Toast.LENGTH_LONG).show()
+
+abstract class Exercise(var exerciseType: String) {
+    var Counter: Int = 0
+        set(value) {
+            field = if(value in 0..9999)
+                value
+            else 0
+        }
+    var Type: String = exerciseType
+    fun Reset(){
+        Counter = 0
+    }
+    override fun toString(): String {
+        return "$Type : $Counter"
+    }
+}
+class PushUp(type: String) : Exercise(type) { }
+class PullUp(type: String) : Exercise(type) { }
+class Dip(type: String) : Exercise(type) { }
+open class Training private constructor(){
+
+    //companion object = static
+    companion object{
+        private var instance: Training? = null
+        fun getInstance()=
+            instance ?: synchronized(this) {
+                instance ?: Training().also { instance = it }
+            }
+    }
+
+    private val exercises = mutableListOf<Exercise>()
+
+    fun AddExercises(exercise: Exercise){
+        this.exercises.add(exercise)
+    }
+    fun RemoveExercise(exercise: Exercise){
+        this.exercises.remove(exercise)
+    }
+    fun AddRepetitions(exercise: Exercise, count: Int){
+        val index: Int = this.exercises.indexOf(exercise)
+        this.exercises[index].Counter += count
+    }
+    fun SubstractRepetitions(exercise: Exercise, count: Int){
+        val index: Int = this.exercises.indexOf(exercise)
+        this.exercises[index].Counter -= count
+    }
+
+    fun GetWorkout(): List<Exercise> {
+        return exercises
+    }
+    fun GetRepetitions(exercise: Exercise): Int{
+        val index: Int = this.exercises.indexOf(exercise)
+        return this.exercises[index].Counter
+    }
+
+    fun Reset(){
+        for (excercise in exercises){
+            excercise.Reset()
+        }
+    }
+    fun Reset(exercise: Exercise){
+        val index: Int = this.exercises.indexOf(exercise)
+        this.exercises[index].Reset()
+    }
+
+    override fun toString(): String {
+        TODO("Not yet implemented")
+    }
+}
 
 class Workout : AppCompatActivity() {
 
-    private lateinit var binding: ActivityWorkoutBinding
+    private lateinit var training: Training
+    private lateinit var pullUp: PullUp
+    private lateinit var pushUp: PushUp
+    private lateinit var dip: Dip
 
-    //counters (dictionary)
-    private val counters = mutableMapOf<String, Int>()
+    private lateinit var binding: ActivityWorkoutBinding
 
     private var timer = Timer()
     private var timerTask: TimerTask? = null
@@ -28,7 +100,6 @@ class Workout : AppCompatActivity() {
 
     private var saved = false
     private var id = -1 //id of workout, -1 if not saved, other number if saved
-    private val maxReps = 9999
 
     //checking for each layer if expanded
     private val expanded = mutableMapOf<String,Boolean>()
@@ -52,10 +123,45 @@ class Workout : AppCompatActivity() {
         expanded[resources.getString(R.string.PullUps)] = false
         expanded[resources.getString(R.string.Dips)] = false
 
-        //initialising counters
-        resetCounters()
+        loadTraining()
+
+
 
     }
+    private fun loadTraining(){
+        training = Training.getInstance()
+            loadNewTraining()
+    }
+    private fun loadOldTraining(): Boolean{
+        //check if unsaved workout exist, in JSON file look at the first row
+        var returnValue = false
+        val builder = AlertDialog.Builder(this@Workout)
+        builder
+            .setTitle("Restore workout")
+            .setMessage("You have unsaved workout, do you want to restore it?")
+            //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
+            .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { _, _ ->
+                //restore old TODO()
+                returnValue = true
+            }
+            .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { _, _ ->
+                returnValue = false
+                reset()
+            }
+        val alter = builder.create()
+        alter.show()
+        return returnValue
+    }
+    private fun loadNewTraining(){
+        pullUp = PullUp("Regular pull up")
+        pushUp = PushUp("Regular push up")
+        dip = Dip("Regular dip")
+
+        training.AddExercises(pullUp)
+        training.AddExercises(pushUp)
+        training.AddExercises(dip)
+    }
+
     //expand methods -- currently unused
      fun onClickExpand(view: View){
         when(val tag: String = view.tag.toString()){
@@ -106,7 +212,7 @@ class Workout : AppCompatActivity() {
                 if (binding.editTextIncDecPushUps.text.toString() == ""){
                     binding.textPushUps.text = "0"
                     binding.textPushUps.clearFocus()
-                    counters[resources.getString(R.string.PushUps)] = 0
+                    training.Reset(pushUp)
                 }
                 binding.editTextIncDecPushUps.text.clear()
                 binding.editTextIncDecPushUps.clearFocus()
@@ -115,7 +221,7 @@ class Workout : AppCompatActivity() {
                 if(binding.editTextIncDecPullUps.text.toString() == ""){
                     binding.textPullUps.text = "0"
                     binding.textPullUps.clearFocus()
-                    counters[resources.getString(R.string.PullUps)] = 0
+                    training.Reset(pullUp)
                 }
                 binding.editTextIncDecPullUps.text.clear()
                 binding.editTextIncDecPullUps.clearFocus()
@@ -124,7 +230,7 @@ class Workout : AppCompatActivity() {
                 if(binding.editTextIncDecDips.text.toString() == ""){
                     binding.textDips.text = "0"
                     binding.textDips.clearFocus()
-                    counters[resources.getString(R.string.Dips)] = 0
+                    training.Reset(dip)
                 }
                 binding.editTextIncDecDips.text.clear()
                 binding.editTextIncDecDips.clearFocus()
@@ -136,10 +242,10 @@ class Workout : AppCompatActivity() {
                     .setMessage("Are you sure you want to delete without saving?")
                     .setNeutralButton(Html.fromHtml("<font color='#2680FF'>Cancel</font>")) { dialog, _ -> dialog.dismiss()}
                     //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
-                    .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { _, _ -> resetCounters() }
+                    .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { _, _ -> reset() }
                     .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { _, _ ->
                         onClickSave(view)
-                        resetCounters()
+                        reset()
                     }
                 val alter = builder.create()
                 alter.show()
@@ -154,36 +260,22 @@ class Workout : AppCompatActivity() {
         //when == switch case
         when(view.tag.toString()){
             resources.getString(R.string.PushUps) -> {
-                if(binding.editTextIncDecPushUps.text.toString() != ""){
-                    if(counters[resources.getString(R.string.PushUps)]!! <= maxReps)
-                    //dictionaryName[Key] += newValue
-                        counters.inc(resources.getString(R.string.PushUps), Integer.parseInt(binding.editTextIncDecPushUps.text.toString()))
-                }else{
-                    if(counters[resources.getString(R.string.PushUps)]!! <= maxReps)
-                    //dictionaryName[Key]++
-                        counters.inc(resources.getString(R.string.PushUps), 1)
-                }
-                binding.textPushUps.text = counters[resources.getString(R.string.PushUps)].toString()
+                (if(binding.editTextIncDecPushUps.text?.toString() == "") 1 else binding.editTextIncDecPushUps.text?.toString()
+                    ?.let { Integer.parseInt(it) })
+                        ?.let { training.AddRepetitions(pushUp, it ) }
+                binding.textPushUps.text = training.GetRepetitions(pushUp).toString()
             }
             resources.getString(R.string.PullUps) -> {
-                if(binding.editTextIncDecPullUps.text.toString() != ""){
-                    if(counters[resources.getString(R.string.PullUps)]!! <= maxReps)
-                        counters.inc(resources.getString(R.string.PullUps), Integer.parseInt(binding.editTextIncDecPullUps.text.toString()))
-                }else{
-                    if(counters[resources.getString(R.string.PullUps)]!! <= maxReps)
-                        counters.inc(resources.getString(R.string.PullUps), 1)
-                }
-                binding.textPullUps.text = counters[resources.getString(R.string.PullUps)].toString()
+                (if(binding.editTextIncDecPullUps.text?.toString() == "") 1 else binding.editTextIncDecPullUps.text?.toString()
+                    ?.let { Integer.parseInt(it) })
+                        ?.let { training.AddRepetitions(pullUp, it ) }
+                binding.textPullUps.text = training.GetRepetitions(pullUp).toString()
             }
             resources.getString(R.string.Dips) -> {
-                if(binding.editTextIncDecDips.text.toString() != ""){
-                    if(counters[resources.getString(R.string.Dips)]!! <= maxReps)
-                        counters.inc(resources.getString(R.string.Dips), Integer.parseInt(binding.editTextIncDecDips.text.toString()))
-                }else{
-                    if(counters[resources.getString(R.string.Dips)]!! <= maxReps)
-                        counters.inc(resources.getString(R.string.Dips), 1)
-                }
-                binding.textDips.text = counters[resources.getString(R.string.Dips)].toString()
+                (if(binding.editTextIncDecDips.text?.toString() == "") 1 else binding.editTextIncDecDips.text?.toString()
+                    ?.let { Integer.parseInt(it) })
+                        ?.let { training.AddRepetitions(dip, it ) }
+                binding.textDips.text = training.GetRepetitions(dip).toString()
             }
             else -> { }
         }
@@ -194,40 +286,22 @@ class Workout : AppCompatActivity() {
         saved = false
         when(view.tag.toString()){
             resources.getString(R.string.PushUps) -> {
-                if(binding.editTextIncDecPushUps.text.toString() != ""){
-                    val toSubtract = Integer.parseInt(binding.editTextIncDecPushUps.text.toString())
-                    if(counters[resources.getString(R.string.PushUps)]!! - toSubtract >= 0)
-                        counters.inc(resources.getString(R.string.PushUps), -toSubtract)
-                    else counters[resources.getString(R.string.PushUps)] = 0
-                }else{
-                    if(counters[resources.getString(R.string.PushUps)]!! >= 1)
-                        counters.inc(resources.getString(R.string.PushUps), -1)
-                }
-                binding.textPushUps.text = counters[resources.getString(R.string.PushUps)].toString()
+                (if(binding.editTextIncDecPushUps.text?.toString() == "") 1 else binding.editTextIncDecPushUps.text?.toString()
+                    ?.let { Integer.parseInt(it) })
+                    ?.let { training.SubstractRepetitions(pushUp, it ) }
+                binding.textPushUps.text = training.GetRepetitions(pushUp).toString()
             }
             resources.getString(R.string.PullUps) -> {
-                if(binding.editTextIncDecPullUps.text.toString() != ""){
-                    val toSubtract = Integer.parseInt(binding.editTextIncDecPullUps.text.toString())
-                    if(counters[resources.getString(R.string.PullUps)]!! - toSubtract >= 0)
-                        counters.inc(resources.getString(R.string.PullUps), -toSubtract)
-                    else counters[resources.getString(R.string.PullUps)] = 0
-                }else{
-                    if(counters[resources.getString(R.string.PullUps)]!! >= 1)
-                        counters.inc(resources.getString(R.string.PullUps), -1)
-                }
-                binding.textPullUps.text = counters[resources.getString(R.string.PullUps)].toString()
+                (if(binding.editTextIncDecPullUps.text?.toString() == "") 1 else binding.editTextIncDecPullUps.text?.toString()
+                    ?.let { Integer.parseInt(it) })
+                    ?.let { training.SubstractRepetitions(pullUp, it ) }
+                binding.textPullUps.text = training.GetRepetitions(pullUp).toString()
             }
             resources.getString(R.string.Dips) -> {
-                if(binding.editTextIncDecDips.text.toString() != ""){
-                    val toSubtract = Integer.parseInt(binding.editTextIncDecDips.text.toString())
-                    if(counters[resources.getString(R.string.Dips)]!! - toSubtract >= 0)
-                        counters.inc(resources.getString(R.string.Dips), -toSubtract)
-                    else counters[resources.getString(R.string.Dips)] = 0
-                }else{
-                    if(counters[resources.getString(R.string.Dips)]!! >= 1)
-                        counters.inc(resources.getString(R.string.Dips), -1)
-                }
-                binding.textDips.text = counters[resources.getString(R.string.Dips)].toString()
+                (if(binding.editTextIncDecDips.text?.toString() == "") 1 else binding.editTextIncDecDips.text?.toString()
+                    ?.let { Integer.parseInt(it) })
+                    ?.let { training.SubstractRepetitions(dip, it ) }
+                binding.textDips.text = training.GetRepetitions(dip).toString()
             }
             else -> { }
         }
@@ -301,13 +375,15 @@ class Workout : AppCompatActivity() {
                 .setTitle("Workout tool")
                 .setNeutralButton(Html.fromHtml("<font color='#2680FF'>Cancel</font>")) { dialog, _ -> dialog.dismiss()}
                 //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
-                .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { _, _ -> finish() }
+                .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { _, _ ->
+                    finish()
+                }
                 .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { _, _ -> onClickSave(view) }
             val alter = builder.create()
             alter.show()
         }
-
     }
+
 
     fun onClickSave(view: View) {
         if(!saved){
@@ -325,7 +401,7 @@ class Workout : AppCompatActivity() {
         //implement shoving history of workouts, from database
     }
 
-    private fun resetCounters(){
+    private fun reset(){
         //clear push ups
         binding.textPushUps.text = "0"
         binding.textPushUps.clearFocus()
@@ -342,9 +418,7 @@ class Workout : AppCompatActivity() {
         binding.editTextIncDecDips.text.clear()
         binding.editTextIncDecDips.clearFocus()
         //set counters to zero
-        counters[resources.getString(R.string.PushUps)] = 0
-        counters[resources.getString(R.string.PullUps)] = 0
-        counters[resources.getString(R.string.Dips)] = 0
+        training.Reset()
     }
 
     //my method for increasing value in dictionary, source:

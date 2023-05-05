@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Settings"
+    android:forceDarkAllowed="false"
+    android:background="@color/black">
+
+    <ImageButton
+        android:id="@+id/btnGoBack"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.00"
+        app:layout_constraintHorizontal_bias="0.00"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="70dp"
+        android:maxHeight="70dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/backicon"
+        android:background="@drawable/workout_round_button"
+        android:layout_margin="5dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/GoBack"
+        android:onClick="onClickGoBack"/>
+
+    <TextView
+        android:id="@+id/textViewSettings"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.12"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:text="@string/Settings"
+        android:textAlignment="center"
+        android:textStyle="italic"
+        android:textColor="@color/white"
+        android:fontFamily="@font/blacklisted"
+        app:autoSizeTextType="uniform"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewSettings"
+        app:layout_constraintVertical_bias="0.00"
+        app:layout_constraintHorizontal_bias="0.00"
+        android:text="Account"
+        android:textSize="30sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/futuramedium"
+        android:drawablePadding="15dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        android:layout_marginTop="20dp"
+        app:drawableLeftCompat="@drawable/account" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
