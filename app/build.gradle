@@ -54,4 +54,6 @@ dependencies {
     def lifecycle_extension_version = '2.6.0-beta01'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_extension_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1'
+
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

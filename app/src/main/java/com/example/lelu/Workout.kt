@@ -1,88 +1,24 @@
 package com.example.lelu
 
-import android.app.Activity
+import android.Manifest.permission.*
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.text.Html
 import android.view.View
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.lelu.WorkoutHandler.Dip
+import com.example.lelu.WorkoutHandler.PullUp
+import com.example.lelu.WorkoutHandler.PushUp
+import com.example.lelu.WorkoutHandler.Training
 import com.example.lelu.databinding.ActivityWorkoutBinding
-import java.util.*
-import kotlin.math.roundToInt
 
 
 //toast: Toast.makeText(applicationContext,"message", Toast.LENGTH_LONG).show()
-
-abstract class Exercise(var exerciseType: String) {
-    var Counter: Int = 0
-        set(value) {
-            field = if(value in 0..9999)
-                value
-            else 0
-        }
-    var Type: String = exerciseType
-    fun Reset(){
-        Counter = 0
-    }
-    override fun toString(): String {
-        return "$Type : $Counter"
-    }
-}
-class PushUp(type: String) : Exercise(type) { }
-class PullUp(type: String) : Exercise(type) { }
-class Dip(type: String) : Exercise(type) { }
-open class Training private constructor(){
-
-    //companion object = static
-    companion object{
-        private var instance: Training? = null
-        fun getInstance()=
-            instance ?: synchronized(this) {
-                instance ?: Training().also { instance = it }
-            }
-    }
-
-    private val exercises = mutableListOf<Exercise>()
-
-    fun AddExercises(exercise: Exercise){
-        this.exercises.add(exercise)
-    }
-    fun RemoveExercise(exercise: Exercise){
-        this.exercises.remove(exercise)
-    }
-    fun AddRepetitions(exercise: Exercise, count: Int){
-        val index: Int = this.exercises.indexOf(exercise)
-        this.exercises[index].Counter += count
-    }
-    fun SubstractRepetitions(exercise: Exercise, count: Int){
-        val index: Int = this.exercises.indexOf(exercise)
-        this.exercises[index].Counter -= count
-    }
-
-    fun GetWorkout(): List<Exercise> {
-        return exercises
-    }
-    fun GetRepetitions(exercise: Exercise): Int{
-        val index: Int = this.exercises.indexOf(exercise)
-        return this.exercises[index].Counter
-    }
-
-    fun Reset(){
-        for (excercise in exercises){
-            excercise.Reset()
-        }
-    }
-    fun Reset(exercise: Exercise){
-        val index: Int = this.exercises.indexOf(exercise)
-        this.exercises[index].Reset()
-    }
-
-    override fun toString(): String {
-        TODO("Not yet implemented")
-    }
-}
 
 class Workout : AppCompatActivity() {
 
@@ -91,12 +27,12 @@ class Workout : AppCompatActivity() {
     private lateinit var pushUp: PushUp
     private lateinit var dip: Dip
 
-    private lateinit var binding: ActivityWorkoutBinding
+    private lateinit var timer: TimeHandler
 
-    private var timer = Timer()
-    private var timerTask: TimerTask? = null
-    private var time = 0.0f
-    private var running = false
+    private val jsonHandler: JSONHandler = JSONHandler()
+    private val fileHandler: FileHandler = FileHandler("appState.json")
+
+    private lateinit var binding: ActivityWorkoutBinding
 
     private var saved = false
     private var id = -1 //id of workout, -1 if not saved, other number if saved
@@ -106,6 +42,18 @@ class Workout : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+        }
+
+        if (ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(WRITE_EXTERNAL_STORAGE), 1)
+        }
+
+        if (ContextCompat.checkSelfPermission(this, CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(CAMERA), 1)
+        }
+
         binding = ActivityWorkoutBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -122,12 +70,12 @@ class Workout : AppCompatActivity() {
         expanded[resources.getString(R.string.PushUps)] = false
         expanded[resources.getString(R.string.PullUps)] = false
         expanded[resources.getString(R.string.Dips)] = false
+        timer = TimeHandler(this, binding)
 
         loadTraining()
 
-
-
     }
+
     private fun loadTraining(){
         training = Training.getInstance()
             loadNewTraining()
@@ -307,63 +255,6 @@ class Workout : AppCompatActivity() {
         }
     }
 
-    //timer methods
-    fun onClickChronometer(view: View){
-        when(view.tag.toString()){
-            resources.getString(R.string.Pause) -> pauseChronometer()
-            resources.getString(R.string.Play) -> startChronometer()
-            resources.getString(R.string.Reset) -> resetChronometer()
-        }
-    }
-    private fun startTimer(){
-        timerTask = object : TimerTask() {
-            override fun run() {
-                (this@Workout as Activity).runOnUiThread {
-                    time++
-                    binding.cChronometer.text = getTimerText()
-                }
-            }
-        }
-        timer.scheduleAtFixedRate(timerTask, 0, 1000)
-    }
-    private fun getTimerText(): String {
-        val rounded = time.roundToInt()
-        val seconds = rounded % 86400 % 3600 % 60
-        val minutes = rounded % 86400 % 3600 / 60
-        val hours = rounded % 86400 / 3600
-        return formatTime(seconds, minutes, hours)
-    }
-    private fun formatTime(seconds: Int, minutes: Int, hours: Int): String {
-        return String.format("%02d", hours) + ":" + String.format(
-            "%02d", minutes) + ":" + String.format("%02d", seconds)
-    }
-    private fun pauseChronometer(){
-        if(running){
-            timerTask?.cancel()
-            running = false
-            binding.buttonPlayTimer.visibility  = View.VISIBLE
-            binding.buttonPauseTimer.visibility = View.GONE
-        }
-    }
-    private fun resetChronometer(){
-        if(timerTask != null){
-            timerTask!!.cancel()
-            running = false
-            time = 0.0F
-            binding.cChronometer.text = formatTime(0,0,0)
-            binding.buttonPlayTimer.visibility  = View.VISIBLE
-            binding.buttonPauseTimer.visibility = View.GONE
-        }
-    }
-    private fun startChronometer(){
-        if(!running){
-            startTimer()
-            running = true
-            binding.buttonPlayTimer.visibility  = View.GONE
-            binding.buttonPauseTimer.visibility = View.VISIBLE
-        }
-    }
-
     //goes back to main manu
     fun onClickGoBack(view: View){
         if(saved){
@@ -376,6 +267,7 @@ class Workout : AppCompatActivity() {
                 .setNeutralButton(Html.fromHtml("<font color='#2680FF'>Cancel</font>")) { dialog, _ -> dialog.dismiss()}
                 //https://stackoverflow.com/questions/33437398/how-to-change-textcolor-in-alertdialog  -->  changing color, font, background in alterDialog box
                 .setNegativeButton(Html.fromHtml("<font color='#2680FF'>No</font>")) { _, _ ->
+                    fileHandler.WriteToFile(jsonHandler.getJSON(training))
                     finish()
                 }
                 .setPositiveButton(Html.fromHtml("<font color='#2680FF'>Yes</font>")) { _, _ -> onClickSave(view) }
@@ -383,7 +275,6 @@ class Workout : AppCompatActivity() {
             alter.show()
         }
     }
-
 
     fun onClickSave(view: View) {
         if(!saved){
@@ -399,6 +290,7 @@ class Workout : AppCompatActivity() {
 
     fun onClickSeeHistory(view: View){
         //implement shoving history of workouts, from database
+        Toast.makeText(applicationContext,fileHandler.ReadFromFile(), Toast.LENGTH_LONG).show()
     }
 
     private fun reset(){
@@ -421,10 +313,10 @@ class Workout : AppCompatActivity() {
         training.Reset()
     }
 
-    //my method for increasing value in dictionary, source:
-    //https://stackoverflow.com/questions/53826903/increase-value-in-mutable-map
-    fun <T> MutableMap<T, Int>.inc(key: T, more: Int = 1) = merge(key, more, Int::plus)
-    fun <T> MutableMap<T, Int>.dec(key: T, more: Int = 1) = merge(key, more, Int::minus)
+    fun onClickChronometer(view: View) {
+
+        timer.onClickChronometer(view)
+    }
 
 }
 
